@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
@@ -18,4 +20,9 @@ public class Others extends AbsIntEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Categore categore;
+
+
+    @OneToOne
+    private Attachment attachment;
+
 }

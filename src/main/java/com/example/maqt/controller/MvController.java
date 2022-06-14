@@ -1,6 +1,5 @@
 package com.example.maqt.controller;
 
-import com.example.maqt.entity.Mv;
 import com.example.maqt.payload.MvDto;
 import com.example.maqt.service.MvService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +36,5 @@ public class MvController {
     public HttpEntity<?> deleteMv(@PathVariable Integer id){
         return mvService.deleteMv(id);
     }
-
 
 }

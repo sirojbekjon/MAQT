@@ -1,11 +1,14 @@
 package com.example.maqt.entity.template;
 
+import com.example.maqt.entity.Attachment;
 import com.example.maqt.entity.State;
 import com.example.maqt.entity.Type;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import javax.persistence.*;
+import java.util.List;
 
 
 @Data
@@ -28,23 +31,13 @@ public abstract class Document extends AbsMainEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     private Type type ;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private State state;
 
+    @OneToOne
+    private Attachment attachment;
 
 
-    @JsonProperty(value = "parent_name")
-    private String parentName()
-    {
-        return this.state.getName();
-    }
-
-    @JsonProperty(value = "parent_id")
-    private Integer parentID()
-    {
-        return this.state.getId();
-    }
 }
 
 

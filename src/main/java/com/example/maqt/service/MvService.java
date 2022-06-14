@@ -1,9 +1,11 @@
 package com.example.maqt.service;
 
+import com.example.maqt.entity.Attachment;
 import com.example.maqt.entity.Mv;
 import com.example.maqt.entity.State;
 import com.example.maqt.entity.Type;
 import com.example.maqt.payload.MvDto;
+import com.example.maqt.repository.AttachmentRepository;
 import com.example.maqt.repository.MvRepository;
 import com.example.maqt.repository.StateRepository;
 import com.example.maqt.repository.TypeRepository;
@@ -13,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,8 +29,11 @@ public class MvService {
 
     @Autowired
     StateRepository stateRepository;
+
+    @Autowired
+    AttachmentRepository attachmentRepository;
     public HttpEntity<?> addMv(MvDto mvDto) {
-        boolean exists = mvRepository.existsByNameAndDate(mvDto.getName(), mvDto.getDate());
+        boolean exists = mvRepository.existsByNumberAndDate(mvDto.getNumber(), mvDto.getDate());
         if (exists)
         {
             return ResponseEntity.status(409).body("Fayil allaqachon qo'shilgan");
@@ -48,6 +52,12 @@ public class MvService {
             State state = optionalState.get();
             newMv.setState(state);
         }
+        Optional<Attachment> optionalAttachment = attachmentRepository.findById(mvDto.getAttachment_id());
+        if (optionalAttachment.isPresent()){
+            Attachment attachment = optionalAttachment.get();
+            newMv.setAttachment(attachment);
+        }
+
         Integer[] MvArray = mvDto.getMvId();
         if (MvArray!=null) {
             List<Mv> MvList = new ArrayList<>();
@@ -62,7 +72,7 @@ public class MvService {
         }
 
         mvRepository.save(newMv);
-return ResponseEntity.status(200).body("Mv saqlandi");
+    return ResponseEntity.status(200).body("Mv saqlandi");
     }
 
     public HttpEntity<?> getAllMv() {
@@ -88,13 +98,18 @@ return ResponseEntity.status(200).body("Mv saqlandi");
         if (optionalMv.isPresent()){
             Mv mv = optionalMv.get();
             mv.setName(mvDto.getName());
+            mv.setNumber(mvDto.getNumber());
+            mv.setDate(mvDto.getDate());
             Optional<Type> optionalType = typeRepository.findById(mvDto.getTypeId());
             mv.setType(optionalType.get());
-            mv.setNumber(mv.getNumber());
-            mv.setDate(mv.getDate());
             if (mvDto.getStateId() != null){
                 Optional<State> optionalState = stateRepository.findById(mvDto.getStateId());
                 mv.setState(optionalState.get());
+            }
+            Optional<Attachment> optionalAttachment = attachmentRepository.findById(mvDto.getAttachment_id());
+            if (optionalAttachment.isPresent()){
+                Attachment attachment = optionalAttachment.get();
+                mv.setAttachment(attachment);
             }
 
             Integer[] MvArray = mvDto.getMvId();

@@ -10,8 +10,8 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
-@Entity
 @NoArgsConstructor
+@Entity
 public class Type extends AbsIntEntity {
 
     @Column(nullable = false)
